@@ -1,0 +1,24 @@
+{
+    "metadata": {
+        "pages": [
+            "Dashboard",
+            "Reports"
+        ],
+        "certified": "No",
+        "publisher": "Community",
+        "description": "Use playbook tags to display your automation ROI based on your own numbers.\nConfigure JobCodes which map jobs to salaries.\nThen, update your playbooks with following playbook tag syntax to include in the ROI calculation:\n#ROI - this indicates that the playbook should be included in ROI calculations\n#ROI_<JobCode>_<Minutes> - this tells the ROI calculator to multiply the salary associated with the JobCode by the number of minutes for each playbook execution\nExample:\nIT salary is configured at $60\/hr\nPlaybook X has the tags #ROI #ROI_IT_30\nIf it is executed (successfully) 5 times, the ROI calculation will be 5 * 60 * (30\/60) = $150 ROI",
+        "compatibility": [
+            "7.2.0",
+            "7.0.2"
+        ]
+    },
+    "name": "roiCalculator",
+    "title": "ROI Calculator",
+    "subTitle": "Uses playbook tags to display an accurate automation ROI",
+    "version": "1.0.0",
+    "published_date": {
+        "date": "2021-04-06 16:00:00.000000",
+        "timezone_type": 3,
+        "timezone": "UTC"
+    }
+}

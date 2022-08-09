@@ -1,0 +1,56 @@
+<div class="widget widget-container">
+    <div class="display-flex-space-between widget-title widget-title-padding">
+      <div class="padding-right-0 padding-left-0" data-ng-class="(page === 'dashboard' || page === 'reporting') ? 'widget-dashboard-title-width' : 'widget-title-width'">
+        <h5 class="margin-top-0 margin-bottom-0 font-1em text-overflow">{{ config.title }}&nbsp;&nbsp;</h5>
+      </div>
+      <div class="padding-right-0 padding-left-0" data-ng-class="(page === 'dashboard' || page === 'reporting') ? 'widget-dashboard-actions-width' : 'widget-actions-width'">
+        <span class="fa btn widget-action-icon btn-sm pull-right" data-ng-click="collapsed = !collapsed" data-ng-class="{'fa-caret-up': !collapsed, 'fa-caret-down': collapsed}"></span>
+        <span data-ng-hide="page === 'dashboard' || page === 'reporting'" class="icon icon-refresh btn btn-sm widget-action-icon pull-right" ng-click="init()" data-uib-tooltip="Refresh"></span>
+      </div>
+    </div>
+    <div class="metric-widget-content" data-ng-hide="collapsed">
+        <div class="widget-cardview">
+            <div class="metrics-container">
+                <div class="metrics-container-body">
+                    <div class="halign-center" data-ng-hide="processing || unauthorized">
+                        <div class="metrics-font-style metrics-number">
+                            <span data-ng-if="config.showSavings === 'cost'"
+                                class="card-count"><span
+                                ng-class="config.currencyIcon"></span>{{counts.roi | numberToDisplay}}</span>
+                            <span data-ng-if="config.showSavings === 'time'" class="card-count">{{counts.roiFormat}}</span>
+                        </div>
+                        <div class="display-inline-block"
+                            data-ng-hide="(counts.percentage===0 || counts.percentage === undefined)"
+                            data-ng-if="counts.increasing === true">
+                            <div class="card-count metrics-body-percentage metrics-icon-height">
+                                <i class="fa fa-sort-asc metrics-percentage-icon metric-icon-style" aria-hidden="true"></i>
+                            </div>
+                            <div class="card-count metrics-body-percentage">{{counts.percentage| number:0}}%</div>
+                        </div>
+                        <div class="display-inline-block"
+                            data-ng-hide="(counts.percentage===0 || counts.percentage === undefined)"
+                            data-ng-if="counts.increasing=== false">
+                            <div class="card-count metrics-body-percentage metrics-icon-height">{{counts.percentage| number:0}}%
+                            </div>
+                            <div class="card-count metrics-body-percentage metrics-icon-decrease-height">
+                                <i class="fa fa-sort-desc metrics-percentage-decrease-icon metric-icon-decrease-style"
+                                    aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-lbl" data-ng-hide="processing || unauthorized">
+                        <span>In the last {{config.days}} days</span>
+                    </div>
+                    <div class="watermark" ng-if="false">No Results</div>
+                    <div data-ng-show="processing">
+                        <cs-spinner data-ng-hide="unauthorized" data-show-background="false"></cs-spinner>
+                    </div>
+                    <div data-ng-show="processing || unauthorized" class="unauthorized-message">
+                        <h3 data-ng-show="unauthorized">You do not have read permission for the Playbooks module.</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  
