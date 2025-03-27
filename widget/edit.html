@@ -1,0 +1,169 @@
+<form data-ng-submit="save()" class="noMargin" name="editWidgetForm" data-ng-class="{'state-wait': processing }"
+    novalidate>
+    <div class="modal-header">
+        <h3 class="modal-title col-md-9">Edit ROI Calculator Widget</h3>
+        <button type="button" class="close" data-ng-click="cancel()" data-dismiss="modal" aria-label="Close"
+            id="close-edit-widget-form-btn">
+            <div aria-hidden="true" class="version-button">+</div>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group" data-ng-class="{ 'has-error': editWidgetForm.title.$invalid && editWidgetForm.title.$touched }">
+            <label for="title" class="control-label">Title<span class="text-danger">*</span></label>
+            <input id="title" name="title" type="text" class="form-control" data-ng-model="config.title" required>
+            <div data-cs-messages="editWidgetForm.title"></div>
+          </div>
+        <div class="form-group margin-bottom-20">
+            <div class="padding-top-lg">
+                <label class="control-label margin-bottom-sm padding-right-sm">Show ROI Measured As</label>
+                <div>
+                    <label class="radio-inline display-inline-block">
+                        <input type="radio" name="radio" id="radio-cost-saving" data-ng-model="config.showSavings"
+                            value="cost" checked="true" />
+                        <small class="margin-top-sm display-inline-block">Cost Savings</small>
+                    </label>
+                    <label class="radio-inline display-inline-block padding-left-xlg">
+                        <input type="radio" name="radio" id="radio-time-saving" ng-model="config.showSavings"
+                            value="time" />
+                        <small class="margin-top-sm display-inline-block">Time Savings</small>
+                    </label>
+                </div>
+            </div>
+            <hr />
+            <div class="metrics-widget-border padding-bottom-lg">
+                <div data-ng-if="config.showSavings === 'cost'">
+                	<h6>Cost Savings Configuration</h6>
+                    <div class="form-group">
+                        <label for="currency-select">Currency</label>
+                        <select name="currency-select" class="form-control"
+                            ng-options="currencyIcon.id as currencyIcon.name for currencyIcon in currencyIcons" required
+                            ng-model="config.currencyIcon"></select>
+                    </div>
+                    <table class="table margin-top-lg">
+                        <thead>
+                            <tr>
+                                <th>Job Code&nbsp;
+                                    <span data-uib-tooltip="Job code that this widget will include"
+                                    data-tooltip-append-to-body="true">
+                                    <i class="icon icon-information font-Size-13"></i>
+                                </span></th>
+                                <th>Value
+                                    (<span ng-class="config.currencyIcon"></span>) per hour&nbsp;
+                                    <span data-uib-tooltip="Average cost estimate for each hour for this job code"
+                                    data-tooltip-append-to-body="true">
+                                    <i class="icon icon-information font-Size-13"></i>
+                                </span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="jobCode in config.jobCodes">
+                                <td>
+                                    <div class="form-group"
+                                    data-ng-class="{ 'has-error': editWidgetForm.jobCodeId.$invalid && editWidgetForm.jobCodeId.$touched }">
+                                        <input type="text" id="jobCodeId{{$index}}" name="jobCodeId{{$index}}" class="form-control input-sm"
+                                        data-ng-model="jobCode.id" required pattern="^[a-zA-Z0-9]*$" placeholder="e.g. HR" autocomplete="off">
+                                        <p class="small margin-left-sm"><span class="muted">Tags:</span><span class="tags-style">ROI</span><span class="tags-style">ROI_{{jobCode.id}}_XX</span>
+                                            <span data-uib-tooltip="Use these tags for your playbook to calculate ROI. Replace XX with a number of minutes that the playbook saves for this job code."
+                                            data-tooltip-append-to-body="true">
+                                            <i class="icon icon-information font-Size-13"></i>
+                                        </span></p>
+                                        <div data-cs-messages="editWidgetForm.jobCodeId"></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-inline"
+                                        data-ng-class="{ 'has-error': editWidgetForm.perHour.$invalid && editWidgetForm.perHour.$touched }">
+                                        <input type="number" step="1" data-ng-min="1" min="1" id="perHour{{$index}}" name="perHour{{$index}}"
+                                            class="form-control input-sm" data-ng-model="jobCode.perHour" 
+                                            required autocomplete="off">
+                                        <label class="control-label padding-left-md" for="perHour{{$index}}"><span
+                                                ng-class="config.currencyIcon"></span>/hour</label>
+                                    </div>
+                                    <div data-cs-messages="editWidgetForm.perHour"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <button type="button" class="btn btn-link" ng-click="addJobCode()">+ Add Job Code</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div data-ng-if="config.showSavings === 'time'">
+                	<h6>Time Savings Configuration</h6>
+                    <table class="table margin-top-lg">
+                        <thead>
+                            <tr>
+                                <th>Job Code&nbsp;
+                                    <span data-uib-tooltip="Job code that this widget will include"
+                                    data-tooltip-append-to-body="true">
+                                    <i class="icon icon-information font-Size-13"></i>
+                                </span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="jobCode in config.jobCodes">
+                                <td>
+                                    <div class="form-group"
+                                    data-ng-class="{ 'has-error': editWidgetForm.jobCodeId.$invalid && editWidgetForm.jobCodeId.$touched }">
+                                        <input type="text" id="jobCodeId{{$index}}" name="jobCodeId{{$index}}" class="form-control input-sm"
+                                        data-ng-model="jobCode.id" required pattern="^[a-zA-Z0-9]*$" placeholder="e.g. HR" autocomplete="off">
+                                        <p class="small margin-left-sm"><span class="muted">Tags:</span><span class="tags-style">ROI</span><span class="tags-style">ROI_{{jobCode.id}}_XX</span>
+                                            <span data-uib-tooltip="Use these tags for your playbook to calculate time savings. Replace XX with a number of minutes that the playbook saves for this job code."
+                                            data-tooltip-append-to-body="true">
+                                            <i class="icon icon-information font-Size-13"></i>
+                                        </span></p>
+                                        <div data-cs-messages="editWidgetForm.jobCodeId"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <button type="button" class="btn btn-link" ng-click="addJobCode()">+ Add Job Code</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <hr />
+                <div class="padding-top-lg checkbox">
+                    <label for="onlyIncludeSuccesses">
+                        <input id="onlyIncludeSuccesses" type="checkbox" name="onlyIncludeSuccesses"
+                            data-ng-model="config.onlyIncludeSuccesses">Only include successful playbook executions
+                    </label>
+                    <span
+                        data-uib-tooltip="Includes only successful playbook executions. If unchecked, it will include both failed and successful executions"
+                        data-tooltip-append-to-body="true">
+                        <i class="margin-left-sm icon icon-information font-Size-13"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="form-group">
+                <label for="filters" class="control-label">Time Range</label>
+            </div>
+            <div class="row margin-bottom-sm">
+                <div class="col-md-4">
+                    <div class="form-group margin-bottom-0 display-inline-flex"
+                        data-ng-class="{ 'has-error': editWidgetForm.dayRange.$invalid && editWidgetForm.dayRange.$touched }">
+                        <label class="control-label margin-top-sm"> Last </label>
+                        <input id="dayRange" name="dayRange" type="number" step="1" data-ng-min="1" min="1"
+                            class="form-control input-sm margin-left-md margin-right-md" data-ng-model="config.days"
+                            required>
+                        <label class="control-label margin-top-sm"> Days</label>
+                    </div>
+                    <div data-cs-messages="editWidgetForm.dayRange"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button id="edit-widget-save" type="submit" class="btn btn-sm btn-primary"><i
+                class="icon icon-check margin-right-sm"></i>Save</button>
+        <button id="edit-widget-cancel" type="button" class="btn btn-sm btn-default" data-ng-click="cancel()"><i
+                class="icon icon-close margin-right-sm"></i>Close</button>
+    </div>
+</form>
